@@ -1,5 +1,8 @@
 #!/usr/local/bin/ruby
 
 require 'brameczka'
+require 'yaml'
 
-Brameczka.sms(:number => "510166268", :from => "oki", :message => "To jest testowa wiadomosc :-)")
+abook = YAML.load(IO.read('abook.yaml'))
+
+Brameczka.sms(:number => abook[:ja], :from => "oki", :message => "To jest testowa wiadomosc :-)")
