@@ -47,18 +47,23 @@ class Brameczka
             }))
 
             # parse output
+
+            return_hash = {}
             if data =~ /<font size="\+2">(.*?)<\/font>/
                 puts "Status: #{$1}"
+                return_hash[:status] = $1
             end
 
             if data =~ /<center>(Zosta.*?)<\/center>/
                 puts $1
+                return_hash[:count] = $1
             else
                 puts "Klapa"
                 f = File.new("log.html", "w")
                 f.puts data
                 f.close
             end
+            return return_hash
 
         end
     end
