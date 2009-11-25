@@ -19,8 +19,6 @@ class Brameczka
             message = params[:message]
             from    = params[:from]
 
-            # validate params, TODO
-
             http = Net::HTTP.new('www.brameczka.pl', 80)
             # with http proxy, more: http://lista-proxy.net/proxy-lista
             # http = Net::HTTP.new('www.brameczka.pl', 80, '212.241.180.239', 81)
@@ -50,12 +48,12 @@ class Brameczka
 
             return_hash = {}
             if data =~ /<font size="\+2">(.*?)<\/font>/
-                puts "Status: #{$1}"
+                # puts "Status: #{$1}"
                 return_hash[:status] = $1
             end
 
             if data =~ /<center>(Zosta.*?)<\/center>/
-                puts $1
+                # puts $1
                 return_hash[:count] = $1
             else
                 puts "Klapa"
@@ -64,7 +62,6 @@ class Brameczka
                 f.close
             end
             return return_hash
-
         end
     end
 end

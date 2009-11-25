@@ -23,12 +23,48 @@
 #
 # gg: 442781, mail: oki malpa md6 kropka org
 
+require 'pp'
 require File.dirname(__FILE__) + '/brameczka'
 
-FROM = "ja"
+def retryable_deluxe(options = {}, &block)
+    opts = { :tries => 1, :on => { :exception => Exception, :return => false } }.merge(options)
+    retry_opt, retries = opts[:on], opts[:tries]
+
+    retry_exception = retry_opt[:exception]
+    retry_return    = retry_opt[:return]
+
+    retries_max = retries + 1
+
+    begin
+        puts "Attempt: #{retries_max-retries}"
+        return yield == retry_return && raise(retry_exception,"#{retry_return}")
+    rescue retry_exception => e
+        retry if (retries -= 1) > 0
+        raise "Zonk: #{e}"
+    end
+end
 
 # ARGV[0] - numer tel
 # ARGV[1] - wiadomosc
+number = ARGV[0]
+message = ARGV[1]
+from = "ja"
 
-puts "Wysylam smsa do: #{ARGV[0]}"
-Brameczka.sms(:number => ARGV[0], :from => FROM, :message => ARGV[1])
+retryable_deluxe(:tries => 10, :on => { :exception => Timeout::Error, :return => false }) do
+    h_res = {}
+    Timeout::timeout(30) {
+        puts "Wysylam smsa do: #{number}"
+        h_res = Brameczka.sms(:number => number, :from => from, :message => message)
+        # h_res = { :status => "Sproboj za chwile", :count => "Testy, nic ci nie zostalo" }
+
+        if h_res[:status] =~ /(?:Spr.buj za chwil.|Wyst.pi. b..d)/
+            puts "Blad: #{h_res[:status].gsub(/<br>.*/,'')} - ponawiam probe"
+            false
+        else
+            puts "To: #{number}"
+            puts "Body: #{message}"
+            puts "Status: #{h_res[:status]}"
+            puts "#{h_res[:count]}"
+        end
+    }
+end

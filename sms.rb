@@ -5,6 +5,5 @@ require 'yaml'
 require 'pp'
 
 abook = YAML.load(IO.read('abook.yaml'))
-response = Brameczka.sms(:number => abook[:ania], :from => "ja", :message => "No wstal moj kochany nunusiak?")
-
+response = Brameczka.sms(:number => abook[:ania], :from => "michal", :message => "zonkownia")
 pp response
