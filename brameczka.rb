@@ -5,9 +5,9 @@ require 'uri'
 
 class Brameczka
     HEADERS = {
-      'Host' => 'brameczka.pl',
+      'Host' => 'sms.priv.pl',
       'User-Agent' => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; pl; rv:1.9.0.2) Gecko/2008091618 Firefox/3.0.2',
-      'Referer' => 'http://brameczka.pl/',
+      'Referer' => 'http://sms.priv.pl/',
       'Accept' => 'image/png,image/*;q=0.8,*/*;q=0.5',
       'Accept-Language' => 'pl,en-us;q=0.7,en;q=0.3',
       'Accept-Charset' => 'ISO-8859-2,utf-8;q=0.7,*;q=0.7',
@@ -19,7 +19,7 @@ class Brameczka
             message = params[:message]
             from    = params[:from]
 
-            http = Net::HTTP.new('www.brameczka.pl', 80)
+            http = Net::HTTP.new('www.sms.priv.pl', 80)
             # with http proxy, more: http://lista-proxy.net/proxy-lista
             # http = Net::HTTP.new('www.brameczka.pl', 80, '212.241.180.239', 81)
 
